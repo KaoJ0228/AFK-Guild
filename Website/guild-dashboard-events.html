@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guildforge Dashboard</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #121a2d;
+      --panel-2: #18233b;
+      --border: rgba(255,255,255,.09);
+      --text: #f4f7ff;
+      --muted: #9aa7c2;
+      --accent: #8b7cff;
+      --accent-2: #25d9a2;
+      --orange: #ffb454;
+      --red: #ff6d82;
+      --shadow: 0 20px 50px rgba(0,0,0,.22);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(139,124,255,.2), transparent 30%),
+        radial-gradient(circle at 90% 10%, rgba(37,217,162,.12), transparent 25%),
+        var(--bg);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button {
+      border: 0;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: 100vh;
+    }
+
+    aside {
+      padding: 26px 18px;
+      border-right: 1px solid var(--border);
+      background: rgba(8, 13, 27, .78);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 0 10px 30px;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--accent), #5ee7c5);
+      color: #07111d;
+      font-size: 21px;
+      font-weight: 900;
+      box-shadow: 0 8px 25px rgba(139,124,255,.35);
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: .02em;
+    }
+
+    .brand p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .section-label {
+      margin: 16px 12px 10px;
+      color: #687592;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .nav {
+      display: grid;
+      gap: 7px;
+    }
+
+    .nav button {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 12px 13px;
+      border-radius: 12px;
+      background: transparent;
+      color: var(--muted);
+      text-align: left;
+      transition: .2s ease;
+    }
+
+    .nav button:hover,
+    .nav button.active {
+      color: var(--text);
+      background: linear-gradient(90deg, rgba(139,124,255,.2), rgba(139,124,255,.06));
+    }
+
+    .nav button.active {
+      box-shadow: inset 3px 0 var(--accent);
+    }
+
+    .nav-icon {
+      width: 20px;
+      color: var(--accent-2);
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .sidebar-card {
+      margin-top: 28px;
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: linear-gradient(145deg, rgba(139,124,255,.13), rgba(37,217,162,.06));
+    }
+
+    .sidebar-card p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .sidebar-card button,
+    .primary {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: var(--accent);
+      color: white;
+      font-weight: 800;
+      font-size: 12px;
+    }
+
+    main {
+      min-width: 0;
+      padding: 28px 34px 42px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--accent-2);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 36px);
+      letter-spacing: -.04em;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .search {
+      width: 190px;
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      outline: 0;
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+    }
+
+    .avatar {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ffb454, #ff6d82);
+      color: #1a1020;
+      font-weight: 900;
+    }
+
+    .view {
+      display: none;
+      animation: fade .25s ease;
+    }
+
+    .view.active { display: block; }
+
+    @keyframes fade {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .hero-card,
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: linear-gradient(145deg, rgba(24,35,59,.93), rgba(15,23,42,.9));
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 24px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      right: -70px;
+      bottom: -110px;
+      width: 270px;
+      height: 270px;
+      border-radius: 50%;
+      border: 35px solid rgba(139,124,255,.12);
+    }
+
+    .hero-card h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+
+    .hero-card p {
+      max-width: 560px;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .guild-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 20px;
+    }
+
+    .tag {
+      padding: 7px 10px;
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      background: rgba(255,255,255,.05);
+      color: #cbd4e9;
+      font-size: 11px;
+    }
+
+    .rank-card {
+      padding: 23px;
+      background: linear-gradient(145deg, #282556, #172f42);
+    }
+
+    .rank-card small,
+    .stat-label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .rank-number {
+      margin: 12px 0 4px;
+      font-size: 46px;
+      font-weight: 900;
+      letter-spacing: -.08em;
+    }
+
+    .rank-card p {
+      margin: 0;
+      color: #d3dbeb;
+      font-size: 12px;
+    }
+
+    .progress-track {
+      height: 8px;
+      margin-top: 17px;
+      overflow: hidden;
+      border-radius: 10px;
+      background: rgba(255,255,255,.1);
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .stat {
+      padding: 18px;
+    }
+
+    .stat-value {
+      margin: 8px 0 4px;
+      font-size: 26px;
+      font-weight: 900;
+    }
+
+    .stat-note {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+    }
+
+    .card {
+      padding: 20px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .card-header h3 {
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .card-header button,
+    .filter {
+      padding: 7px 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .event-list,
+    .deadline-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .event,
+    .deadline,
+    .reward,
+    .link-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255,255,255,.035);
+    }
+
+    .event-left,
+    .deadline-left,
+    .reward-left {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+    }
+
+    .event-icon,
+    .reward-icon {
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 35px;
+      height: 35px;
+      border-radius: 10px;
+      background: rgba(139,124,255,.18);
+      color: #b8afff;
+    }
+
+    .event strong,
+    .deadline strong,
+    .reward strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 12px;
+    }
+
+    .event small,
+    .deadline small,
+    .reward small {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .status {
+      flex: 0 0 auto;
+      padding: 5px 8px;
+      border-radius: 7px;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .status.live { background: rgba(37,217,162,.14); color: var(--accent-2); }
+    .status.soon { background: rgba(255,180,84,.14); color: var(--orange); }
+    .status.done { background: rgba(154,167,194,.13); color: var(--muted); }
+
+    .deadline-date {
+      color: var(--orange);
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .quick-links {
+      display: grid;
+      gap: 10px;
+    }
+
+    .link-row {
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .link-row:hover {
+      border-color: rgba(139,124,255,.5);
+      transform: translateX(3px);
+    }
+
+    .link-arrow {
+      color: var(--accent-2);
+      font-size: 18px;
+    }
+
+    .progress-item {
+      margin: 17px 0;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      color: #dce4f6;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .progress-label span:last-child {
+      color: var(--accent-2);
+    }
+
+    .reward-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 11px;
+    }
+
+    .reward {
+      display: block;
+      min-height: 112px;
+    }
+
+    .reward-icon {
+      margin-bottom: 10px;
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 7px;
+      margin-bottom: 14px;
+    }
+
+    .filter.active {
+      background: var(--accent);
+      color: white;
+      border-color: transparent;
+    }
+
+    .events-workspace {
+      display: grid;
+      grid-template-columns: minmax(330px, .85fr) minmax(430px, 1.15fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .events-panel,
+    .details-panel {
+      min-height: 610px;
+    }
+
+    .events-panel { padding: 20px; }
+
+    .details-panel {
+      position: sticky;
+      top: 20px;
+      padding: 22px;
+    }
+
+    .date-strip {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .date-card {
+      min-height: 68px;
+      padding: 9px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(255,255,255,.035);
+      color: var(--muted);
+      text-align: left;
+    }
+
+    .date-card:hover,
+    .date-card.active {
+      border-color: rgba(139,124,255,.65);
+      background: rgba(139,124,255,.14);
+      color: var(--text);
+    }
+
+    .date-card small,
+    .date-card strong { display: block; }
+    .date-card small { font-size: 9px; }
+    .date-card strong { margin-top: 6px; font-size: 18px; }
+
+    .event-clickable {
+      width: 100%;
+      color: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .event-clickable:hover,
+    .event-clickable.selected {
+      border-color: rgba(139,124,255,.65);
+      background: rgba(139,124,255,.12);
+      transform: translateX(3px);
+    }
+
+    .detail-empty {
+      display: grid;
+      min-height: 550px;
+      place-items: center;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .detail-empty div { max-width: 260px; }
+    .detail-empty .big-icon { margin-bottom: 12px; font-size: 45px; }
+    .detail-empty p { font-size: 12px; line-height: 1.5; }
+
+    .detail-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding-bottom: 17px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .detail-header .event-icon {
+      width: 46px;
+      height: 46px;
+      font-size: 20px;
+    }
+
+    .detail-header h3 { margin: 0 0 6px; font-size: 21px; }
+    .detail-header p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .detail-header .status { margin-left: auto; }
+
+    .detail-section {
+      padding: 17px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .detail-section:last-child { border-bottom: 0; }
+    .detail-section h4 { margin: 0 0 12px; font-size: 12px; }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 9px;
+    }
+
+    .meta-box {
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: rgba(255,255,255,.04);
+    }
+
+    .meta-box label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 9px;
+      text-transform: uppercase;
+    }
+
+    .meta-box strong { font-size: 11px; }
+
+    .objective { margin: 13px 0; }
+
+    .objective-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 7px;
+      color: #dce4f6;
+      font-size: 11px;
+    }
+
+    .objective-row span:last-child { color: var(--accent-2); }
+
+    .detail-list,
+    .leaderboard,
+    .officer-actions { display: grid; gap: 8px; }
+
+    .detail-row,
+    .leaderboard-row,
+    .officer-action {
+      padding: 10px 11px;
+      border-radius: 9px;
+      background: rgba(255,255,255,.045);
+      font-size: 11px;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .detail-row span { color: var(--muted); }
+    .detail-row strong { color: var(--orange); }
+
+    .leaderboard-row {
+      display: grid;
+      grid-template-columns: 28px 1fr auto;
+      gap: 8px;
+    }
+
+    .leaderboard-row span:first-child { color: var(--orange); font-weight: 900; }
+
+    .officer-actions { grid-template-columns: repeat(3, 1fr); }
+
+    .officer-action {
+      border: 1px solid var(--border);
+      background: rgba(139,124,255,.08);
+      color: #ddd9ff;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    @media (max-width: 980px) {
+      .app { grid-template-columns: 210px 1fr; }
+      main { padding: 24px; }
+      .hero, .grid, .events-workspace { grid-template-columns: 1fr; }
+      .details-panel { position: static; }
+    }
+
+    @media (max-width: 720px) {
+      .app { display: block; }
+      aside {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        padding: 12px;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .brand { padding: 0 4px 12px; }
+      .section-label, .sidebar-card { display: none; }
+      .nav {
+        display: flex;
+        overflow-x: auto;
+      }
+      .nav button {
+        flex: 0 0 auto;
+        width: auto;
+        padding: 9px 12px;
+      }
+      .nav button.active { box-shadow: inset 0 -3px var(--accent); }
+      main { padding: 20px 15px 35px; }
+      .topbar { align-items: flex-start; }
+      .search { display: none; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .reward-grid { grid-template-columns: 1fr; }
+      .date-strip { grid-template-columns: repeat(4, 1fr); }
+      .date-card:nth-child(n+5) { display: none; }
+      .meta-grid, .officer-actions { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <div class="brand">
+        <div class="brand-mark">✦</div>
+        <div>
+          <h1>Guildforge</h1>
+          <p>Guild command center</p>
+        </div>
+      </div>
+
+      <div class="section-label">Workspace</div>
+      <nav class="nav">
+        <button class="active" data-view="overview"><span class="nav-icon">⌂</span>Overview</button>
+        <button data-view="guild"><span class="nav-icon">♜</span>Guild Information</button>
+        <button data-view="events"><span class="nav-icon">◈</span>Events</button>
+        <button data-view="deadlines"><span class="nav-icon">◷</span>Deadlines</button>
+        <button data-view="progress"><span class="nav-icon">↗</span>Guild Progress</button>
+        <button data-view="rewards"><span class="nav-icon">✧</span>Rewards</button>
+      </nav>
+
+      <div class="section-label">Shortcuts</div>
+      <nav class="nav">
+        <button data-view="events"><span class="nav-icon">＋</span>Create Event</button>
+        <button data-view="guild"><span class="nav-icon">⚙</span>Guild Settings</button>
+      </nav>
+
+      <div class="sidebar-card">
+        <p>Keep your guild on track by completing weekly objectives together.</p>
+        <button onclick="showToast('New objective creation opened')">＋ New Objective</button>
+      </div>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <div>
+          <p class="eyebrow">Monday, October 12, 2026</p>
+          <h2 id="page-title">Guild overview</h2>
+        </div>
+        <div class="top-actions">
+          <input class="search" placeholder="Search guild..." />
+          <div class="avatar">JK</div>
+        </div>
+      </div>
+
+      <section class="view active" id="overview">
+        <div class="hero">
+          <div class="hero-card">
+            <h3>Welcome back, Jason 👋</h3>
+            <p>Your guild is having a strong week. The team has completed 68% of its seasonal objectives and has three upcoming activities to prepare for.</p>
+            <div class="guild-meta">
+              <span class="tag">✦ Nightfall Vanguard</span>
+              <span class="tag">⚔️ 42 members</span>
+              <span class="tag">🌎 North America</span>
+            </div>
+          </div>
+          <div class="hero-card rank-card">
+            <small>Season ranking</small>
+            <div class="rank-number">#12</div>
+            <p>Top 15% of all active guilds</p>
+            <div class="progress-track"><div class="progress-fill" style="width:78%"></div></div>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="card stat">
+            <div class="stat-label">Active members</div>
+            <div class="stat-value">34</div>
+            <div class="stat-note">+5 this week</div>
+          </div>
+          <div class="card stat">
+            <div class="stat-label">Events this month</div>
+            <div class="stat-value">18</div>
+            <div class="stat-note">4 remaining</div>
+          </div>
+          <div class="card stat">
+            <div class="stat-label">Guild points</div>
+            <div class="stat-value">8,460</div>
+            <div class="stat-note">+1,240 this week</div>
+          </div>
+          <div class="card stat">
+            <div class="stat-label">Rewards available</div>
+            <div class="stat-value">7</div>
+            <div class="stat-note">Claim before Friday</div>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <div class="card-header">
+              <h3>Upcoming events</h3>
+              <button onclick="switchView('events')">View all →</button>
+            </div>
+            <div class="event-list">
+              <div class="event">
+                <div class="event-left"><div class="event-icon">⚔</div><div><strong>Citadel Siege</strong><small>Today · 8:00 PM · 18 members joined</small></div></div>
+                <span class="status live">LIVE SOON</span>
+              </div>
+              <div class="event">
+                <div class="event-left"><div class="event-icon">♜</div><div><strong>Strategy Workshop</strong><small>Wednesday · 6:30 PM · Training room</small></div></div>
+                <span class="status soon">UPCOMING</span>
+              </div>
+              <div class="event">
+                <div class="event-left"><div class="event-icon">✦</div><div><strong>Weekly Guild Run</strong><small>Friday · 9:00 PM · 24 members joined</small></div></div>
+                <span class="status soon">UPCOMING</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>Event deadlines</h3>
+              <button onclick="switchView('deadlines')">See calendar →</button>
+            </div>
+            <div class="deadline-list">
+              <div class="deadline"><div class="deadline-left"><div class="event-icon">!</div><div><strong>Roster confirmation</strong><small>Citadel Siege</small></div></div><span class="deadline-date">Today</span></div>
+              <div class="deadline"><div class="deadline-left"><div class="event-icon">!</div><div><strong>Sign-up closes</strong><small>Weekly Guild Run</small></div></div><span class="deadline-date">Oct 15</span></div>
+              <div class="deadline"><div class="deadline-left"><div class="event-icon">!</div><div><strong>Reward claim window</strong><small>Season challenge</small></div></div><span class="deadline-date">Oct 16</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="guild">
+        <div class="card">
+          <div class="card-header"><h3>Guild information</h3><button class="primary" style="width:auto" onclick="showToast('Guild settings opened')">Edit guild</button></div>
+          <div class="hero-card" style="margin-bottom:16px">
+            <h3>✦ Nightfall Vanguard</h3>
+            <p>A coordinated guild focused on competitive progression, weekly events, and helping every member improve.</p>
+            <div class="guild-meta"><span class="tag">Founded March 2024</span><span class="tag">Guild level 24</span><span class="tag">Recruiting</span></div>
+          </div>
+          <div class="stats">
+            <div class="card stat"><div class="stat-label">Total members</div><div class="stat-value">42</div><div class="stat-note">8 officers · 34 members</div></div>
+            <div class="card stat"><div class="stat-label">Weekly activity</div><div class="stat-value">91%</div><div class="stat-note">Excellent participation</div></div>
+            <div class="card stat"><div class="stat-label">Guild treasury</div><div class="stat-value">24.8K</div><div class="stat-note">Available resources</div></div>
+            <div class="card stat"><div class="stat-label">Reputation</div><div class="stat-value">4.9</div><div class="stat-note">From 38 reviews</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="events">
+        <div class="events-workspace">
+          <div class="card events-panel">
+            <div class="card-header">
+              <h3>Guild events</h3>
+              <button class="primary" style="width:auto" onclick="showToast('Event creation opened')">＋ Create event</button>
+            </div>
+
+            <div class="date-strip">
+              <button class="date-card active" data-date="all"> <small>ALL</small><strong>All</strong></button>
+              <button class="date-card" data-date="2026-10-12"><small>MON</small><strong>12</strong></button>
+              <button class="date-card" data-date="2026-10-13"><small>TUE</small><strong>13</strong></button>
+              <button class="date-card" data-date="2026-10-14"><small>WED</small><strong>14</strong></button>
+              <button class="date-card" data-date="2026-10-15"><small>THU</small><strong>15</strong></button>
+              <button class="date-card" data-date="2026-10-16"><small>FRI</small><strong>16</strong></button>
+              <button class="date-card" data-date="2026-10-17"><small>SAT</small><strong>17</strong></button>
+            </div>
+
+            <div class="filter-row">
+              <button class="filter active" data-filter="all">All</button>
+              <button class="filter" data-filter="active">Active</button>
+              <button class="filter" data-filter="upcoming">Upcoming</button>
+              <button class="filter" data-filter="completed">Completed</button>
+              <button class="filter" data-filter="Guild Duel">Guild Duel</button>
+              <button class="filter" data-filter="Clashfronts">Clashfronts</button>
+              <button class="filter" data-filter="Battle Drills">Battle Drills</button>
+            </div>
+
+            <div class="event-list" id="event-list"></div>
+          </div>
+
+          <div class="card details-panel" id="event-details-panel"></div>
+        </div>
+      </section>
+
+      <section class="view" id="deadlines">
+        <div class="card">
+          <div class="card-header"><h3>Deadlines and reminders</h3><button onclick="showToast('Reminder added')">＋ Add reminder</button></div>
+          <div class="deadline-list">
+            <div class="deadline"><div class="deadline-left"><div class="event-icon">!</div><div><strong>Roster confirmation</strong><small>Confirm the final Citadel Siege team</small></div></div><span class="deadline-date">Today · 5:00 PM</span></div>
+            <div class="deadline"><div class="deadline-left"><div class="event-icon">!</div><div><strong>Sign-up closes</strong><small>Weekly Guild Run registration</small></div></div><span class="deadline-date">Oct 15</span></div>
+            <div class="deadline"><div class="deadline-left"><div class="event-icon">!</div><div><strong>Reward claim window</strong><small>Claim your Season 8 milestone rewards</small></div></div><span class="deadline-date">Oct 16</span></div>
+            <div class="deadline"><div class="deadline-left"><div class="event-icon">!</div><div><strong>Weekly report</strong><small>Officer activity summary</small></div></div><span class="deadline-date">Oct 18</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="progress">
+        <div class="grid">
+          <div class="card">
+            <div class="card-header"><h3>Overall guild progress</h3><span class="tag">Season 8</span></div>
+            <div class="progress-item"><div class="progress-label"><span>Season objectives</span><span>68%</span></div><div class="progress-track"><div class="progress-fill" style="width:68%"></div></div></div>
+            <div class="progress-item"><div class="progress-label"><span>Member participation</span><span>91%</span></div><div class="progress-track"><div class="progress-fill" style="width:91%"></div></div></div>
+            <div class="progress-item"><div class="progress-label"><span>Weekly activity</span><span>82%</span></div><div class="progress-track"><div class="progress-fill" style="width:82%"></div></div></div>
+            <div class="progress-item"><div class="progress-label"><span>Guild level experience</span><span>74%</span></div><div class="progress-track"><div class="progress-fill" style="width:74%"></div></div></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Next milestones</h3></div>
+            <div class="deadline-list">
+              <div class="deadline"><div class="deadline-left"><div class="event-icon">Ⅰ</div><div><strong>10,000 guild points</strong><small>1,540 points remaining</small></div></div></div>
+              <div class="deadline"><div class="deadline-left"><div class="event-icon">Ⅱ</div><div><strong>Level 25 guild</strong><small>26,400 XP remaining</small></div></div></div>
+              <div class="deadline"><div class="deadline-left"><div class="event-icon">Ⅲ</div><div><strong>Season top 10</strong><small>Improve ranking by 2 places</small></div></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="rewards">
+        <div class="card">
+          <div class="card-header"><h3>Rewards and bonuses</h3><span class="tag">7 available</span></div>
+          <div class="reward-grid">
+            <div class="reward"><div class="reward-icon">✧</div><strong>Season milestone</strong><small>1,000 guild points</small></div>
+            <div class="reward"><div class="reward-icon">♛</div><strong>Top contributor</strong><small>Weekly activity champion</small></div>
+            <div class="reward"><div class="reward-icon">⚡</div><strong>Event streak</strong><small>Complete 5 events in a row</small></div>
+            <div class="reward"><div class="reward-icon">✦</div><strong>Guild level bonus</strong><small>Reach guild level 25</small></div>
+          </div>
+        </div>
+      </section>
+
+      <div id="toast" style="display:none;position:fixed;right:24px;bottom:24px;padding:13px 16px;border:1px solid rgba(37,217,162,.35);border-radius:12px;background:#132c2c;color:#b9ffe9;font-size:12px;box-shadow:var(--shadow)"></div>
+    </main>
+  </div>
+
+  <script>
+    const titles = {
+      overview: "Guild overview",
+      guild: "Guild information",
+      events: "Guild events",
+      deadlines: "Deadlines and reminders",
+      progress: "Guild progress",
+      rewards: "Rewards center"
+    };
+
+    const events = [
+      {
+        id: "citadel",
+        name: "Citadel Siege",
+        type: "Guild Duel",
+        status: "active",
+        icon: "⚔",
+        start: "2026-10-12",
+        end: "2026-10-14",
+        phase: "Battle phase",
+        location: "Citadel Arena · Voice 1",
+        members: "18 / 25",
+        description: "A competitive guild-versus-guild event where members contribute points and earn Crests.",
+        objectives: [["Guild progress", 68, "6,800 / 10,000"], ["Member participation", 72, "18 / 25 members"], ["Crest collection", 45, "90 / 200 Crests"]],
+        rewards: ["1,000 guild points", "5 Rare Crests", "Season ranking bonus"],
+        rules: ["Only registered members may contribute", "Contribution locks when the event ends", "Members may not register twice"],
+        leaderboard: [["1", "Astra", "1,420 pts"], ["2", "Jason", "1,180 pts"], ["3", "Mira", "980 pts"]]
+      },
+      {
+        id: "strategy",
+        name: "Strategy Workshop",
+        type: "Battle Drills",
+        status: "upcoming",
+        icon: "♜",
+        start: "2026-10-14",
+        end: "2026-10-14",
+        phase: "Registration",
+        location: "Guild Hall · Training Room",
+        members: "12 / 20",
+        description: "A training event focused on formations, rotations, and encounter preparation.",
+        objectives: [["Guild progress", 60, "3 / 5 drills completed"], ["Workshop attendance", 60, "12 / 20 members"]],
+        rewards: ["250 guild points", "Training badge"],
+        rules: ["Bring a prepared loadout", "Arrive 10 minutes early", "Progress is shared across the guild"]
+      },
+      {
+        id: "weekly",
+        name: "Weekly Guild Run",
+        type: "Clashfronts",
+        status: "upcoming",
+        icon: "✦",
+        start: "2026-10-16",
+        end: "2026-10-18",
+        phase: "Sign-ups",
+        location: "North Gate · Voice 2",
+        members: "24 / 30",
+        description: "A coordinated guild activity focused on pushing shared Clashfronts objectives.",
+        objectives: [["Guild progress", 35, "3,500 / 10,000"], ["Zones secured", 20, "2 / 10 zones"]],
+        rewards: ["500 guild points", "1 Epic Crest"],
+        rules: ["Only guild-level progress is tracked", "All members may join the roster", "Progress is shared across the guild"]
+      },
+      {
+        id: "resource",
+        name: "Resource Gathering",
+        type: "Clashfronts",
+        status: "completed",
+        icon: "✓",
+        start: "2026-10-10",
+        end: "2026-10-10",
+        phase: "Complete",
+        location: "Eastern Outpost",
+        members: "31 / 31",
+        description: "Completed gathering event that helped the guild prepare for the next Clashfronts cycle.",
+        objectives: [["Guild progress", 100, "10,000 / 10,000"], ["Resources gathered", 100, "4,000 / 4,000"]],
+        rewards: ["750 guild points", "Completed event chest"],
+        rules: ["Guild-level progress only"]
+      }
+    ];
+
+    let activeFilter = "all";
+    let activeDate = "all";
+    let selectedEventId = "citadel";
+
+    function switchView(viewName) {
+      document.querySelectorAll(".view").forEach(view => {
+        view.classList.toggle("active", view.id === viewName);
+      });
+
+      document.querySelectorAll(".nav button[data-view]").forEach(button => {
+        button.classList.toggle("active", button.dataset.view === viewName);
+      });
+
+      document.getElementById("page-title").textContent = titles[viewName] || "Guild overview";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    document.querySelectorAll(".nav button[data-view]").forEach(button => {
+      button.addEventListener("click", () => switchView(button.dataset.view));
+    });
+
+    function formatDate(date) {
+      return new Date(date + "T12:00:00").toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+      });
+    }
+
+    function matchesEvent(event) {
+      const filterMatch = activeFilter === "all" ||
+        event.status === activeFilter ||
+        event.type === activeFilter;
+
+      const dateMatch = activeDate === "all" ||
+        (event.start <= activeDate && activeDate <= event.end);
+
+      return filterMatch && dateMatch;
+    }
+
+    function renderEvents() {
+      const list = document.getElementById("event-list");
+      const visibleEvents = events.filter(matchesEvent);
+
+      if (!visibleEvents.length) {
+        list.innerHTML = `<div style="padding:35px;color:var(--muted);text-align:center;font-size:12px">No events match these filters.</div>`;
+        return;
+      }
+
+      list.innerHTML = visibleEvents.map(event => `
+        <button class="event event-clickable ${selectedEventId === event.id ? "selected" : ""}" onclick="selectEvent('${event.id}')">
+          <div class="event-left">
+            <div class="event-icon">${event.icon}</div>
+            <div>
+              <strong>${event.name}</strong>
+              <small>${event.type} · ${formatDate(event.start)}${event.start !== event.end ? ` – ${formatDate(event.end)}` : ""} · ${event.members} joined</small>
+            </div>
+          </div>
+          <span class="status ${event.status === "active" ? "live" : event.status === "upcoming" ? "soon" : "done"}">${event.status.toUpperCase()}</span>
+        </button>
+      `).join("");
+    }
+
+    function selectEvent(eventId) {
+      selectedEventId = eventId;
+      renderEvents();
+      renderDetails();
+    }
+
+    function renderDetails() {
+      const panel = document.getElementById("event-details-panel");
+      const event = events.find(item => item.id === selectedEventId);
+
+      if (!event) {
+        panel.innerHTML = `<div class="detail-empty"><div><div class="big-icon">◈</div><strong>Select an event</strong><p>Choose an event from the list to view its details.</p></div></div>`;
+        return;
+      }
+
+      const objectives = event.objectives.map(item => `
+        <div class="objective">
+          <div class="objective-row"><span>${item[0]}</span><span>${item[1]}% · ${item[2]}</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:${item[1]}%"></div></div>
+        </div>
+      `).join("");
+
+      const rewards = event.rewards.map(item => `<div class="detail-row"><span>✧ ${item}</span><strong>Available</strong></div>`).join("");
+      const rules = event.rules.map(item => `<div class="detail-row"><span>• ${item}</span><span>Rule</span></div>`).join("");
+
+      const typeSection = event.type === "Guild Duel" ? `
+        <div class="detail-section">
+          <h4>Guild Duel tracking</h4>
+          <div class="meta-grid">
+            <div class="meta-box"><label>Member contributions</label><strong>18 tracked</strong></div>
+            <div class="meta-box"><label>Crests earned</label><strong>${event.objectives[2][2]}</strong></div>
+          </div>
+          <h4 style="margin-top:16px">Contribution leaderboard</h4>
+          <div class="leaderboard">
+            ${event.leaderboard.map(row => `<div class="leaderboard-row"><span>#${row[0]}</span><strong>${row[1]}</strong><span>${row[2]}</span></div>`).join("")}
+          </div>
+        </div>
+      ` : `
+        <div class="detail-section">
+          <h4>${event.type} tracking</h4>
+          <div class="detail-row"><span>${event.type} uses guild-level progress only.</span><strong>Guild-wide</strong></div>
+        </div>
+      `;
+
+      panel.innerHTML = `
+        <div class="detail-header">
+          <div class="event-icon">${event.icon}</div>
+          <div><h3>${event.name}</h3><p>${event.description}</p></div>
+          <span class="status ${event.status === "active" ? "live" : event.status === "upcoming" ? "soon" : "done"}">${event.status.toUpperCase()}</span>
+        </div>
+
+        <div class="detail-section">
+          <h4>Event details</h4>
+          <div class="meta-grid">
+            <div class="meta-box"><label>Mode</label><strong>${event.type}</strong></div>
+            <div class="meta-box"><label>Current phase</label><strong>${event.phase}</strong></div>
+            <div class="meta-box"><label>Start date</label><strong>${formatDate(event.start)}</strong></div>
+            <div class="meta-box"><label>End date</label><strong>${formatDate(event.end)}</strong></div>
+            <div class="meta-box"><label>Participation</label><strong>${event.members}</strong></div>
+            <div class="meta-box"><label>Location</label><strong>${event.location}</strong></div>
+          </div>
+        </div>
+
+        <div class="detail-section"><h4>Objectives and progress</h4>${objectives}</div>
+        ${typeSection}
+        <div class="detail-section"><h4>Rewards</h4><div class="detail-list">${rewards}</div></div>
+        <div class="detail-section"><h4>Rules</h4><div class="detail-list">${rules}</div></div>
+
+        <div class="detail-section">
+          <h4>Officer controls</h4>
+          <div class="officer-actions">
+            <button class="officer-action" onclick="showToast('Event editor opened')">Edit event</button>
+            <button class="officer-action" onclick="showToast('Roster management opened')">Manage roster</button>
+            <button class="officer-action" onclick="showToast('Progress update opened')">Update progress</button>
+          </div>
+        </div>
+      `;
+    }
+
+    document.querySelectorAll(".filter[data-filter]").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".filter[data-filter]").forEach(item => item.classList.remove("active"));
+        button.classList.add("active");
+        activeFilter = button.dataset.filter;
+        renderEvents();
+      });
+    });
+
+    document.querySelectorAll(".date-card[data-date]").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".date-card[data-date]").forEach(item => item.classList.remove("active"));
+        button.classList.add("active");
+        activeDate = button.dataset.date;
+        renderEvents();
+      });
+    });
+
+    let toastTimer;
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.style.display = "block";
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.style.display = "none", 2200);
+    }
+
+    renderEvents();
+    renderDetails();
+  </script>
+</body>
+</html>
