@@ -694,6 +694,102 @@
       text-align: center;
     }
 
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      inset: 0;
+      place-items: center;
+      padding: 18px;
+      background: rgba(3,6,15,.75);
+      backdrop-filter: blur(7px);
+    }
+
+    .modal-backdrop.open { display: grid; }
+
+    .modal {
+      width: min(720px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 23px;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .modal-header h3 { margin: 0; font-size: 18px; }
+
+    .close-button {
+      background: transparent;
+      color: var(--muted);
+      font-size: 23px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 13px;
+    }
+
+    .form-field { display: grid; gap: 6px; }
+    .form-field.full { grid-column: 1 / -1; }
+
+    .form-field label {
+      color: #cad3e8;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      width: 100%;
+      padding: 10px 11px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      outline: 0;
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+    }
+
+    .form-field textarea { min-height: 75px; resize: vertical; }
+    option { background: var(--panel); }
+
+    .form-note {
+      grid-column: 1 / -1;
+      padding: 11px;
+      border-radius: 9px;
+      background: rgba(37,217,162,.08);
+      color: #aeeedb;
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .secondary {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
     @media (max-width: 980px) {
       .app { grid-template-columns: 210px 1fr; }
       main { padding: 24px; }
@@ -757,7 +853,7 @@
 
       <div class="section-label">Shortcuts</div>
       <nav class="nav">
-        <button data-view="events"><span class="nav-icon">＋</span>Create Event</button>
+        <button data-view="events" onclick="openEventEditor()"><span class="nav-icon">＋</span>Create Event</button>
         <button data-view="guild"><span class="nav-icon">⚙</span>Guild Settings</button>
       </nav>
 
@@ -879,7 +975,7 @@
           <div class="card events-panel">
             <div class="card-header">
               <h3>Guild events</h3>
-              <button class="primary" style="width:auto" onclick="showToast('Event creation opened')">＋ Create event</button>
+              <button class="primary" style="width:auto" onclick="openEventEditor()">＋ Create event</button>
             </div>
 
             <div class="date-strip">
@@ -955,6 +1051,89 @@
 
       <div id="toast" style="display:none;position:fixed;right:24px;bottom:24px;padding:13px 16px;border:1px solid rgba(37,217,162,.35);border-radius:12px;background:#132c2c;color:#b9ffe9;font-size:12px;box-shadow:var(--shadow)"></div>
     </main>
+  </div>
+
+  <div class="modal-backdrop" id="event-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="event-form-title">Create guild event</h3>
+        <button class="close-button" type="button" onclick="closeEventEditor()">×</button>
+      </div>
+
+      <form id="event-form">
+        <div class="form-grid">
+          <div class="form-field full">
+            <label for="form-event-name">Event name</label>
+            <input id="form-event-name" required placeholder="Example: Season 8 Guild Tournament" />
+          </div>
+
+          <div class="form-field">
+            <label for="form-event-type">Event type</label>
+            <select id="form-event-type">
+              <option>Clashfronts</option>
+              <option>Guild Duel</option>
+              <option>Battle Drills</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="form-event-status">Status</label>
+            <select id="form-event-status">
+              <option value="upcoming">Upcoming</option>
+              <option value="active">Active</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="form-start-date">Start date</label>
+            <input id="form-start-date" type="date" required />
+          </div>
+
+          <div class="form-field">
+            <label for="form-end-date">End date</label>
+            <input id="form-end-date" type="date" required />
+          </div>
+
+          <div class="form-field">
+            <label for="form-phase">Current phase</label>
+            <input id="form-phase" placeholder="Example: Preparation" />
+          </div>
+
+          <div class="form-field">
+            <label for="form-location">Location / channel</label>
+            <input id="form-location" placeholder="Example: Guild Hall · Voice 1" />
+          </div>
+
+          <div class="form-field full">
+            <label for="form-description">Description</label>
+            <textarea id="form-description" placeholder="Describe the event..."></textarea>
+          </div>
+
+          <div class="form-field full">
+            <label for="form-objectives">Objectives</label>
+            <textarea id="form-objectives" placeholder="Separate objectives with commas"></textarea>
+          </div>
+
+          <div class="form-field full">
+            <label for="form-rewards">Rewards</label>
+            <input id="form-rewards" placeholder="Separate rewards with commas" />
+          </div>
+
+          <div class="form-field full">
+            <label for="form-rules">Rules</label>
+            <textarea id="form-rules" placeholder="Separate rules with commas"></textarea>
+          </div>
+
+          <div class="form-note" id="event-type-note"></div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="secondary" type="button" onclick="closeEventEditor()">Cancel</button>
+          <button class="primary" type="submit" style="width:auto">Save event</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <script>
@@ -1038,6 +1217,13 @@
     let activeFilter = "all";
     let activeDate = "all";
     let selectedEventId = "citadel";
+    let editingEventId = null;
+
+    const eventTypeNotes = {
+      "Clashfronts": "Guild-level progress only. Individual contributions combine into one shared guild score.",
+      "Guild Duel": "Tracks guild progress, member contributions, Crests, and a leaderboard.",
+      "Battle Drills": "Guild-level progress only. Members complete drills toward shared objectives."
+    };
 
     function switchView(viewName) {
       document.querySelectorAll(".view").forEach(view => {
@@ -1104,6 +1290,116 @@
       renderDetails();
     }
 
+    function updateEventTypeNote() {
+      const type = document.getElementById("form-event-type").value;
+      document.getElementById("event-type-note").textContent = eventTypeNotes[type];
+    }
+
+    function setFormValue(id, value) {
+      document.getElementById(id).value = value || "";
+    }
+
+    function openEventEditor(eventId = null) {
+      editingEventId = eventId;
+      const event = eventId ? events.find(item => item.id === eventId) : null;
+
+      document.getElementById("event-form-title").textContent =
+        event ? "Edit guild event" : "Create guild event";
+
+      if (event) {
+        setFormValue("form-event-name", event.name);
+        setFormValue("form-event-type", event.type);
+        setFormValue("form-event-status", event.status);
+        setFormValue("form-start-date", event.start);
+        setFormValue("form-end-date", event.end);
+        setFormValue("form-phase", event.phase);
+        setFormValue("form-location", event.location);
+        setFormValue("form-description", event.description);
+        setFormValue("form-objectives", event.objectives.map(item => item[0]).join(", "));
+        setFormValue("form-rewards", event.rewards.join(", "));
+        setFormValue("form-rules", event.rules.join(", "));
+      } else {
+        document.getElementById("event-form").reset();
+        setFormValue("form-start-date", "2026-10-20");
+        setFormValue("form-end-date", "2026-10-20");
+        setFormValue("form-phase", "Preparation");
+      }
+
+      updateEventTypeNote();
+      document.getElementById("event-modal").classList.add("open");
+    }
+
+    function closeEventEditor() {
+      document.getElementById("event-modal").classList.remove("open");
+      editingEventId = null;
+    }
+
+    function listFromInput(id, fallback) {
+      const value = document.getElementById(id).value.trim();
+      return value ? value.split(",").map(item => item.trim()).filter(Boolean) : [fallback];
+    }
+
+    function iconForType(type) {
+      if (type === "Guild Duel") return "⚔";
+      if (type === "Battle Drills") return "♜";
+      return "✦";
+    }
+
+    function editEvent(eventId) {
+      openEventEditor(eventId);
+    }
+
+    document.getElementById("form-event-type").addEventListener("change", updateEventTypeNote);
+
+    document.getElementById("event-form").addEventListener("submit", event => {
+      event.preventDefault();
+
+      const type = document.getElementById("form-event-type").value;
+      const start = document.getElementById("form-start-date").value;
+      const end = document.getElementById("form-end-date").value;
+
+      if (end < start) {
+        showToast("End date cannot be before the start date");
+        return;
+      }
+
+      const values = {
+        name: document.getElementById("form-event-name").value.trim(),
+        type,
+        status: document.getElementById("form-event-status").value,
+        start,
+        end,
+        phase: document.getElementById("form-phase").value.trim() || "Preparation",
+        location: document.getElementById("form-location").value.trim() || "Not set",
+        description: document.getElementById("form-description").value.trim() || "Guild event created by an officer.",
+        objectives: listFromInput("form-objectives", "Guild progress").map(item => [item, 0, "0% complete"]),
+        rewards: listFromInput("form-rewards", "Guild event reward"),
+        rules: listFromInput("form-rules", "Follow guild officer instructions"),
+        icon: iconForType(type)
+      };
+
+      if (editingEventId) {
+        const existing = events.find(item => item.id === editingEventId);
+        Object.assign(existing, values);
+        selectedEventId = existing.id;
+        showToast("Event updated successfully");
+      } else {
+        const newEvent = {
+          id: "evt-" + Date.now(),
+          ...values,
+          members: "0 / 0",
+          leaderboard: []
+        };
+        events.unshift(newEvent);
+        selectedEventId = newEvent.id;
+        showToast("Event created successfully");
+      }
+
+      closeEventEditor();
+      renderEvents();
+      renderDetails();
+    });
+
     function renderDetails() {
       const panel = document.getElementById("event-details-panel");
       const event = events.find(item => item.id === selectedEventId);
@@ -1169,7 +1465,7 @@
         <div class="detail-section">
           <h4>Officer controls</h4>
           <div class="officer-actions">
-            <button class="officer-action" onclick="showToast('Event editor opened')">Edit event</button>
+            <button class="officer-action" onclick="editEvent('${event.id}')">Edit event</button>
             <button class="officer-action" onclick="showToast('Roster management opened')">Manage roster</button>
             <button class="officer-action" onclick="showToast('Progress update opened')">Update progress</button>
           </div>
