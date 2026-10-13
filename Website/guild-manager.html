@@ -566,6 +566,102 @@
     .date-card small { font-size: 9px; }
     .date-card strong { margin-top: 6px; font-size: 18px; }
 
+    .calendar-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .calendar-toolbar h4 {
+      flex: 1;
+      margin: 0;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .calendar-nav,
+    .all-dates-button {
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .all-dates-button.active,
+    .calendar-nav:hover {
+      border-color: rgba(139,124,255,.65);
+      background: rgba(139,124,255,.15);
+      color: var(--text);
+    }
+
+    .month-calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      margin-bottom: 16px;
+    }
+
+    .calendar-weekday {
+      padding: 5px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 800;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .calendar-day {
+      position: relative;
+      min-height: 62px;
+      padding: 7px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(255,255,255,.035);
+      color: var(--muted);
+      text-align: left;
+    }
+
+    .calendar-day.other-month { opacity: .35; }
+
+    .calendar-day:hover,
+    .calendar-day.active {
+      border-color: rgba(139,124,255,.7);
+      background: rgba(139,124,255,.16);
+      color: var(--text);
+    }
+
+    .calendar-day.today strong {
+      display: inline-grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--teal);
+      color: #07111d;
+    }
+
+    .calendar-day strong { font-size: 12px; }
+
+    .calendar-events {
+      display: grid;
+      gap: 3px;
+      margin-top: 6px;
+    }
+
+    .calendar-event-dot {
+      overflow: hidden;
+      padding: 2px 4px;
+      border-radius: 4px;
+      background: rgba(37,217,162,.18);
+      color: var(--accent-2);
+      font-size: 8px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     .event-clickable {
       width: 100%;
       color: inherit;
@@ -790,6 +886,138 @@
       font-weight: 800;
     }
 
+    .objective-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .objective-tab,
+    .objective-type {
+      padding: 8px 11px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .objective-tab.active,
+    .objective-type.active {
+      border-color: transparent;
+      background: var(--accent);
+      color: white;
+    }
+
+    .objective-summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .objective-summary-card {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255,255,255,.04);
+    }
+
+    .objective-summary-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .objective-summary-card strong {
+      display: block;
+      margin-top: 7px;
+      font-size: 24px;
+    }
+
+    .objective-summary-card small {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .objective-list {
+      display: grid;
+      gap: 11px;
+    }
+
+    .objective-card {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: rgba(255,255,255,.035);
+    }
+
+    .objective-card-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .objective-card h4 {
+      margin: 0 0 5px;
+      font-size: 13px;
+    }
+
+    .objective-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .objective-percent {
+      color: var(--accent-2);
+      font-size: 18px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .objective-card .progress-track {
+      margin-top: 13px;
+    }
+
+    .objective-card-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .deadline-warning { color: var(--orange); }
+    .deadline-danger { color: var(--red); }
+
+    .member-progress {
+      display: grid;
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .member-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      padding: 9px;
+      border-radius: 8px;
+      background: rgba(255,255,255,.045);
+      font-size: 11px;
+    }
+
+    .member-row span { color: var(--muted); }
+
+    @media (max-width: 720px) {
+      .objective-summary { grid-template-columns: 1fr; }
+    }
+
     @media (max-width: 980px) {
       .app { grid-template-columns: 210px 1fr; }
       main { padding: 24px; }
@@ -824,8 +1052,9 @@
       .search { display: none; }
       .stats { grid-template-columns: repeat(2, 1fr); }
       .reward-grid { grid-template-columns: 1fr; }
-      .date-strip { grid-template-columns: repeat(4, 1fr); }
-      .date-card:nth-child(n+5) { display: none; }
+      .month-calendar { gap: 3px; }
+      .calendar-day { min-height: 52px; padding: 5px; }
+      .calendar-event-dot { font-size: 7px; }
       .meta-grid, .officer-actions { grid-template-columns: 1fr; }
     }
   </style>
@@ -978,15 +1207,14 @@
               <button class="primary" style="width:auto" onclick="openEventEditor()">＋ Create event</button>
             </div>
 
-            <div class="date-strip">
-              <button class="date-card active" data-date="all"> <small>ALL</small><strong>All</strong></button>
-              <button class="date-card" data-date="2026-10-12"><small>MON</small><strong>12</strong></button>
-              <button class="date-card" data-date="2026-10-13"><small>TUE</small><strong>13</strong></button>
-              <button class="date-card" data-date="2026-10-14"><small>WED</small><strong>14</strong></button>
-              <button class="date-card" data-date="2026-10-15"><small>THU</small><strong>15</strong></button>
-              <button class="date-card" data-date="2026-10-16"><small>FRI</small><strong>16</strong></button>
-              <button class="date-card" data-date="2026-10-17"><small>SAT</small><strong>17</strong></button>
+            <div class="calendar-toolbar">
+              <button class="calendar-nav" id="previous-month">←</button>
+              <h4 id="calendar-month">October 2026</h4>
+              <button class="calendar-nav" id="next-month">→</button>
+              <button class="all-dates-button active" id="all-dates-button">All dates</button>
             </div>
+
+            <div class="month-calendar" id="month-calendar"></div>
 
             <div class="filter-row">
               <button class="filter active" data-filter="all">All</button>
@@ -1018,22 +1246,29 @@
       </section>
 
       <section class="view" id="progress">
-        <div class="grid">
-          <div class="card">
-            <div class="card-header"><h3>Overall guild progress</h3><span class="tag">Season 8</span></div>
-            <div class="progress-item"><div class="progress-label"><span>Season objectives</span><span>68%</span></div><div class="progress-track"><div class="progress-fill" style="width:68%"></div></div></div>
-            <div class="progress-item"><div class="progress-label"><span>Member participation</span><span>91%</span></div><div class="progress-track"><div class="progress-fill" style="width:91%"></div></div></div>
-            <div class="progress-item"><div class="progress-label"><span>Weekly activity</span><span>82%</span></div><div class="progress-track"><div class="progress-fill" style="width:82%"></div></div></div>
-            <div class="progress-item"><div class="progress-label"><span>Guild level experience</span><span>74%</span></div><div class="progress-track"><div class="progress-fill" style="width:74%"></div></div></div>
-          </div>
-          <div class="card">
-            <div class="card-header"><h3>Next milestones</h3></div>
-            <div class="deadline-list">
-              <div class="deadline"><div class="deadline-left"><div class="event-icon">Ⅰ</div><div><strong>10,000 guild points</strong><small>1,540 points remaining</small></div></div></div>
-              <div class="deadline"><div class="deadline-left"><div class="event-icon">Ⅱ</div><div><strong>Level 25 guild</strong><small>26,400 XP remaining</small></div></div></div>
-              <div class="deadline"><div class="deadline-left"><div class="event-icon">Ⅲ</div><div><strong>Season top 10</strong><small>Improve ranking by 2 places</small></div></div></div>
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3>Objective progress</h3>
+              <small style="color:var(--muted)">Track guild goals and event participation</small>
             </div>
+            <span class="tag">Season 8</span>
           </div>
+
+          <div class="objective-toolbar">
+            <button class="objective-tab active" data-objective-period="daily">Daily</button>
+            <button class="objective-tab" data-objective-period="weekly">Weekly</button>
+            <button class="objective-tab" data-objective-period="event">Event-wide</button>
+          </div>
+
+          <div class="objective-toolbar">
+            <button class="objective-type active" data-objective-type="all">All progress</button>
+            <button class="objective-type" data-objective-type="guild">Guild progress</button>
+            <button class="objective-type" data-objective-type="individual">Individual progress</button>
+          </div>
+
+          <div class="objective-summary" id="objective-summary"></div>
+          <div class="objective-list" id="objective-list"></div>
         </div>
       </section>
 
@@ -1214,8 +1449,113 @@
       }
     ];
 
+    const objectives = [
+      {
+        id: "daily-checkin",
+        period: "daily",
+        scope: "guild",
+        eventType: "Battle Drills",
+        title: "Daily guild activity",
+        description: "Complete a shared activity to keep the guild streak alive.",
+        progress: 84,
+        amount: "42 / 50 activity points",
+        deadline: "Today · 11:59 PM",
+        deadlineClass: "deadline-warning"
+      },
+      {
+        id: "daily-duel",
+        period: "daily",
+        scope: "individual",
+        eventType: "Guild Duel",
+        title: "Daily Duel contribution",
+        description: "Earn contribution points for the current Guild Duel.",
+        progress: 72,
+        amount: "360 / 500 points",
+        deadline: "Today · 11:59 PM",
+        deadlineClass: "deadline-warning",
+        members: [["Jason", "360 pts"], ["Astra", "420 pts"], ["Mira", "285 pts"]]
+      },
+      {
+        id: "weekly-zones",
+        period: "weekly",
+        scope: "guild",
+        eventType: "Clashfronts",
+        title: "Secure weekly zones",
+        description: "Capture zones as a guild during the Weekly Guild Run.",
+        progress: 60,
+        amount: "6 / 10 zones",
+        deadline: "Oct 18, 2026",
+        deadlineClass: "deadline-warning"
+      },
+      {
+        id: "weekly-drills",
+        period: "weekly",
+        scope: "guild",
+        eventType: "Battle Drills",
+        title: "Complete training rotation",
+        description: "Finish the weekly Battle Drills rotation as a guild.",
+        progress: 75,
+        amount: "3 / 4 drills",
+        deadline: "Oct 18, 2026",
+        deadlineClass: "deadline-warning"
+      },
+      {
+        id: "weekly-contribution",
+        period: "weekly",
+        scope: "individual",
+        eventType: "Guild Duel",
+        title: "Guild Duel member contributions",
+        description: "Reach the weekly contribution target for the Guild Duel leaderboard.",
+        progress: 68,
+        amount: "6,800 / 10,000 points",
+        deadline: "Oct 14, 2026",
+        deadlineClass: "deadline-danger",
+        members: [["Astra", "1,420 pts"], ["Jason", "1,180 pts"], ["Mira", "980 pts"]]
+      },
+      {
+        id: "event-clashfronts",
+        period: "event",
+        scope: "guild",
+        eventType: "Clashfronts",
+        title: "Weekly Guild Run progress",
+        description: "Shared progress for the full Clashfronts event duration.",
+        progress: 35,
+        amount: "3,500 / 10,000 guild points",
+        deadline: "Oct 18, 2026",
+        deadlineClass: "deadline-warning"
+      },
+      {
+        id: "event-drills",
+        period: "event",
+        scope: "guild",
+        eventType: "Battle Drills",
+        title: "Strategy Workshop completion",
+        description: "Guild-wide progress across all Battle Drills objectives.",
+        progress: 60,
+        amount: "3 / 5 drills completed",
+        deadline: "Oct 14, 2026",
+        deadlineClass: "deadline-danger"
+      },
+      {
+        id: "event-duel",
+        period: "event",
+        scope: "individual",
+        eventType: "Guild Duel",
+        title: "Citadel Siege contributions",
+        description: "Individual member progress for the active Guild Duel.",
+        progress: 72,
+        amount: "18 / 25 members contributing",
+        deadline: "Oct 14, 2026",
+        deadlineClass: "deadline-danger",
+        members: [["Astra", "1,420 pts"], ["Jason", "1,180 pts"], ["Mira", "980 pts"]]
+      }
+    ];
+
+    let objectivePeriod = "daily";
+    let objectiveScope = "all";
     let activeFilter = "all";
     let activeDate = "all";
+    let calendarMonth = new Date(2026, 9, 1);
     let selectedEventId = "citadel";
     let editingEventId = null;
 
@@ -1473,6 +1813,101 @@
       `;
     }
 
+    function renderObjectives() {
+      const list = document.getElementById("objective-list");
+      const summary = document.getElementById("objective-summary");
+
+      const visibleObjectives = objectives.filter(objective => {
+        const periodMatch = objective.period === objectivePeriod;
+        const scopeMatch = objectiveScope === "all" || objective.scope === objectiveScope;
+        return periodMatch && scopeMatch;
+      });
+
+      const average = visibleObjectives.length
+        ? Math.round(visibleObjectives.reduce((total, item) => total + item.progress, 0) / visibleObjectives.length)
+        : 0;
+
+      const completed = visibleObjectives.filter(item => item.progress >= 100).length;
+
+      summary.innerHTML = `
+        <div class="objective-summary-card">
+          <span>Visible objectives</span>
+          <strong>${visibleObjectives.length}</strong>
+          <small>${objectivePeriod === "event" ? "Across active events" : `This ${objectivePeriod} cycle`}</small>
+        </div>
+        <div class="objective-summary-card">
+          <span>Average progress</span>
+          <strong>${average}%</strong>
+          <small>${objectiveScope === "individual" ? "Guild Duel members only" : "Guild objectives included"}</small>
+        </div>
+        <div class="objective-summary-card">
+          <span>Completed</span>
+          <strong>${completed} / ${visibleObjectives.length}</strong>
+          <small>Keep pushing forward</small>
+        </div>
+      `;
+
+      if (!visibleObjectives.length) {
+        list.innerHTML = `
+          <div style="padding:35px;color:var(--muted);text-align:center;font-size:12px">
+            Individual progress is only available for Guild Duel objectives.
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = visibleObjectives.map(objective => `
+        <article class="objective-card">
+          <div class="objective-card-top">
+            <div>
+              <h4>${objective.title}</h4>
+              <p>${objective.description}</p>
+            </div>
+            <div class="objective-percent">${objective.progress}%</div>
+          </div>
+
+          <div class="progress-track">
+            <div class="progress-fill" style="width:${objective.progress}%"></div>
+          </div>
+
+          <div class="objective-card-footer">
+            <span>${objective.eventType} · ${objective.scope === "guild" ? "Guild-wide" : "Individual"}</span>
+            <span>${objective.amount}</span>
+            <span class="${objective.deadlineClass}">Deadline: ${objective.deadline}</span>
+          </div>
+
+          ${objective.scope === "individual" ? `
+            <div class="member-progress">
+              ${objective.members.map(member => `
+                <div class="member-row">
+                  <strong>${member[0]}</strong>
+                  <span>${member[1]}</span>
+                </div>
+              `).join("")}
+            </div>
+          ` : ""}
+        </article>
+      `).join("");
+    }
+
+    document.querySelectorAll("[data-objective-period]").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll("[data-objective-period]").forEach(item => item.classList.remove("active"));
+        button.classList.add("active");
+        objectivePeriod = button.dataset.objectivePeriod;
+        renderObjectives();
+      });
+    });
+
+    document.querySelectorAll("[data-objective-type]").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll("[data-objective-type]").forEach(item => item.classList.remove("active"));
+        button.classList.add("active");
+        objectiveScope = button.dataset.objectiveType;
+        renderObjectives();
+      });
+    });
+
     document.querySelectorAll(".filter[data-filter]").forEach(button => {
       button.addEventListener("click", () => {
         document.querySelectorAll(".filter[data-filter]").forEach(item => item.classList.remove("active"));
@@ -1482,13 +1917,102 @@
       });
     });
 
-    document.querySelectorAll(".date-card[data-date]").forEach(button => {
-      button.addEventListener("click", () => {
-        document.querySelectorAll(".date-card[data-date]").forEach(item => item.classList.remove("active"));
-        button.classList.add("active");
-        activeDate = button.dataset.date;
-        renderEvents();
+    function dateKey(year, month, day) {
+      return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    }
+
+    function eventIsOnDate(event, date) {
+      return event.start <= date && date <= event.end;
+    }
+
+    function renderCalendar() {
+      const calendar = document.getElementById("month-calendar");
+      const monthTitle = document.getElementById("calendar-month");
+      const year = calendarMonth.getFullYear();
+      const month = calendarMonth.getMonth();
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const previousMonthDays = new Date(year, month, 0).getDate();
+
+      monthTitle.textContent = calendarMonth.toLocaleDateString("en-US", {
+        month: "long",
+        year: "numeric"
       });
+
+      const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+        .map(day => `<div class="calendar-weekday">${day}</div>`)
+        .join("");
+
+      let days = "";
+
+      for (let cell = 0; cell < 42; cell++) {
+        const dayOffset = cell - firstDay + 1;
+        let cellYear = year;
+        let cellMonth = month;
+        let dayNumber = dayOffset;
+        let otherMonth = false;
+
+        if (dayOffset <= 0) {
+          otherMonth = true;
+          cellMonth = month - 1;
+          if (cellMonth < 0) {
+            cellMonth = 11;
+            cellYear--;
+          }
+          dayNumber = previousMonthDays + dayOffset;
+        } else if (dayOffset > daysInMonth) {
+          otherMonth = true;
+          cellMonth = month + 1;
+          if (cellMonth > 11) {
+            cellMonth = 0;
+            cellYear++;
+          }
+          dayNumber = dayOffset - daysInMonth;
+        }
+
+        const date = dateKey(cellYear, cellMonth, dayNumber);
+        const dayEvents = events.filter(event => eventIsOnDate(event, date));
+        const isToday = date === "2026-10-12";
+        const isActive = activeDate === date;
+
+        days += `
+          <button class="calendar-day ${otherMonth ? "other-month" : ""} ${isToday ? "today" : ""} ${isActive ? "active" : ""}" data-calendar-date="${date}">
+            <strong>${dayNumber}</strong>
+            <div class="calendar-events">
+              ${dayEvents.slice(0, 3).map(event => `<span class="calendar-event-dot">${event.name}</span>`).join("")}
+              ${dayEvents.length > 3 ? `<span class="calendar-event-dot">+${dayEvents.length - 3} more</span>` : ""}
+            </div>
+          </button>
+        `;
+      }
+
+      calendar.innerHTML = weekdays + days;
+
+      calendar.querySelectorAll("[data-calendar-date]").forEach(button => {
+        button.addEventListener("click", () => {
+          activeDate = button.dataset.calendarDate;
+          document.getElementById("all-dates-button").classList.remove("active");
+          renderCalendar();
+          renderEvents();
+        });
+      });
+    }
+
+    document.getElementById("previous-month").addEventListener("click", () => {
+      calendarMonth.setMonth(calendarMonth.getMonth() - 1);
+      renderCalendar();
+    });
+
+    document.getElementById("next-month").addEventListener("click", () => {
+      calendarMonth.setMonth(calendarMonth.getMonth() + 1);
+      renderCalendar();
+    });
+
+    document.getElementById("all-dates-button").addEventListener("click", () => {
+      activeDate = "all";
+      document.getElementById("all-dates-button").classList.add("active");
+      renderCalendar();
+      renderEvents();
     });
 
     let toastTimer;
@@ -1502,6 +2026,8 @@
 
     renderEvents();
     renderDetails();
+    renderObjectives();
+    renderCalendar();
   </script>
 </body>
 </html>
