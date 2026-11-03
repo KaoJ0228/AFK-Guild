@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guild Events</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header class="top-bar">
+    <div class="logo">Guild Hub</div>
+
+    <nav class="nav-links">
+      <a href="Guild.html" class="nav-button">Dashboard</a>
+      <a href="Events.html" class="nav-button active">Events</a>
+      <a href="objectives.html" class="nav-button">Objectives</a>
+      <a href="members.html" class="nav-button">Members</a>
+      <a href="settings.html" class="nav-button">Settings</a>
+    </nav>
+  </header>
+
+  <main class="event-page">
+
+    <section class="calendar-section">
+      <div class="calendar-header">
+        <h1 id="calendar-month">November 2026</h1>
+        <div class="calendar-actions">
+            <button id="previous-month" class="month-button">&lt;</button>
+            <button id="today-button" class="today-button">Today</button>
+            <button id="next-month" class="month-button">&gt;</button>
+        </div>
+      </div>
+
+      <div class="calendar-weekdays">
+        <div>Sun</div>
+        <div>Mon</div>
+        <div>Tue</div>
+        <div>Wed</div>
+        <div>Thu</div>
+        <div>Fri</div>
+        <div>Sat</div>
+      </div>
+
+      <div id="calendar-days" class="calendar-days"></div>
+
+      <div class="day-events">
+        <h2 id="selected-date-title">Events on this day</h2>
+        <div id="day-event-list"></div>
+      </div>
+    </section>
+
+    <section class="event-detail-section">
+      <h2>Event Details</h2>
+
+      <div id="event-details" class="event-details">
+        <p>Select an event to view its details.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="Events.js"></script>
+</body>
+</html>
