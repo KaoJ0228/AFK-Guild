@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Objectives</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header class="top-bar">
+    <div class="logo">Guild Hub</div>
+
+    <nav class="nav-links">
+      <a href="Guild(1).html" class="nav-button">Dashboard</a>
+      <a href="events.html" class="nav-button">Events</a>
+      <a href="objectives.html" class="nav-button active">Objectives</a>
+      <a href="members.html" class="nav-button">Members</a>
+      <a href="settings.html" class="nav-button">Settings</a>
+    </nav>
+  </header>
+    <main class="event-objectives-page">
+
+    <section class="event-summary">
+        <div class="event-summary-row">
+            <h1 id="event-title"></h1>
+        </div>
+
+        <div class="event-summary-row">
+            <p id="event-duration"></p>
+        </div>
+    </section>
+
+    <div class="objective-columns">
+
+        <section class="objective-panel">
+            <h2>Guild Missions</h2>
+            <div id="mission-list"></div>
+        </section>
+
+        <section class="objective-panel">
+            <h2>Mode Detail</h2>
+
+            <div class="empty-placeholder">
+                WIP.
+            </div>
+        </section>
+
+        <section class="objective-panel">
+            <h2>Last Recap</h2>
+            <div id="recap-content"></div>
+        </section>
+
+    </div>
+
+    </main>
+
+  <script src="ObjectivesEvent.js"></script>
+</body>
+</html>
