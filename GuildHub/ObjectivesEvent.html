@@ -12,9 +12,9 @@
     <div class="logo">Guild Hub</div>
 
     <nav class="nav-links">
-      <a href="Guild(1).html" class="nav-button">Dashboard</a>
-      <a href="events.html" class="nav-button">Events</a>
-      <a href="objectives.html" class="nav-button active">Objectives</a>
+      <a href="Guild.html" class="nav-button">Dashboard</a>
+      <a href="Events.html" class="nav-button">Events</a>
+      <a href="Objectives.html" class="nav-button active">Objectives</a>
       <a href="members.html" class="nav-button">Members</a>
       <a href="settings.html" class="nav-button">Settings</a>
     </nav>
@@ -23,33 +23,32 @@
 
     <section class="event-summary">
         <div class="event-summary-row">
-            <h1 id="event-title"></h1>
+        <span class="event-label">Event Name</span>
+        <h1 id="event-title"></h1>
         </div>
 
         <div class="event-summary-row">
-            <p id="event-duration"></p>
+        <span class="event-label">Duration</span>
+        <p id="event-duration"></p>
         </div>
     </section>
 
-    <div class="objective-columns">
+    <div id="event-layout" class="event-layout">
 
-        <section class="objective-panel">
-            <h2>Guild Missions</h2>
-            <div id="mission-list"></div>
-        </section>
+    <section id="left-panel" class="event-panel">
+        <h2 id="left-panel-title"></h2>
+        <div id="left-content"></div>
+    </section>
 
-        <section class="objective-panel">
-            <h2>Mode Detail</h2>
+    <section id="middle-panel" class="event-panel">
+        <h2 id="middle-panel-title"></h2>
+        <div id="middle-content"></div>
+    </section>
 
-            <div class="empty-placeholder">
-                WIP.
-            </div>
-        </section>
-
-        <section class="objective-panel">
-            <h2>Last Recap</h2>
-            <div id="recap-content"></div>
-        </section>
+    <section id="right-panel" class="event-panel">
+        <h2 id="right-panel-title"></h2>
+        <div id="right-content"></div>
+    </section>
 
     </div>
 
